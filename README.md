@@ -1,5 +1,3 @@
-# ComexFlow - Gestão de Importação/Exportação
-
 MVP de uma plataforma de gestão de processos de importação e exportação com Kanban operacional.
 
 ## 🚀 Tecnologias
@@ -26,10 +24,8 @@ npm run dev
 
 ## 🎨 Funcionalidades
 
-- **Dashboard**: Widgets com métricas rápidas
 - **Kanban Board**: Gestão visual de processos com drag and drop
 - **Modal de Edição**: Edição completa de processos
-- **Preview de E-mail**: Geração automática de e-mails de atualização
 - **Gestão de Clientes**: CRUD completo de clientes
 
 ## 📁 Estrutura
