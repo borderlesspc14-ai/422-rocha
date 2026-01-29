@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { CategoriaCarga, Projeto } from '@/types/comex';
+import { CategoriaCarga, Projeto, TipoCarga } from '@/types/comex';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StandardTable, StandardTableColumn, TagOption } from '@/components/ui/standard-table';
@@ -7,24 +7,11 @@ import { exportToCSV } from '@/lib/export-utils';
 import {
   Plus,
   Eye,
-  Star,
   X,
   ChevronDown,
   ChevronRight,
-  MessageCircle,
   Check,
-  Pencil,
-  Tag,
 } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-} from '@/components/ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
@@ -197,9 +184,9 @@ interface ColunaDinamica {
 }
 
 export function Cargas({
-  processos,
-  clientes,
-  onProcessosChange,
+  processos: _processos,
+  clientes: _clientes,
+  onProcessosChange: _onProcessosChange,
 }: CargasProps) {
   const [colunasBase, setColunasBase] = useState(colunasBaseIniciais);
   const [categorias, setCategorias] = useState<CategoriaCarga[]>(categoriasMock);
@@ -210,7 +197,7 @@ export function Cargas({
   const [projetoComentarioAberto, setProjetoComentarioAberto] = useState<string | null>(null);
   const [comentarioAtual, setComentarioAtual] = useState('');
   const [comentariosTemp, setComentariosTemp] = useState<string[]>([]);
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState<string>('fcl');
+  // categoriaSelecionada removido - não utilizado
   const [colunasDinamicas, setColunasDinamicas] = useState<ColunaDinamica[]>([]);
   const [mostrarDialogNovaColuna, setMostrarDialogNovaColuna] = useState(false);
   const [novaColunaLabel, setNovaColunaLabel] = useState('');
@@ -275,7 +262,7 @@ export function Cargas({
     const novaCategoria: CategoriaCarga = {
       id: `cat-${Date.now()}`,
       nome: novaCategoriaNome.trim(),
-      tipo: 'Custom' as TipoCarga,
+      tipo: 'FCL' as TipoCarga,
       projetos: [],
     };
     setCategorias((prev) => [...prev, novaCategoria]);
@@ -285,7 +272,8 @@ export function Cargas({
   };
 
   const handleExportProjetos = (categoriaId: string, selectedData: Projeto[]) => {
-    const colunasExport = colunas.map((col) => ({
+    const colunasCompletas = [...colunasBase, ...colunasDinamicas].filter((col) => !colunasOcultas.has(col.id));
+    const colunasExport = colunasCompletas.map((col: StandardTableColumn<Projeto>) => ({
       id: col.id,
       label: col.label,
     }));
@@ -294,7 +282,7 @@ export function Cargas({
       selectedData,
       colunasExport,
       `cargas-${categoriaId}-${new Date().toISOString().split('T')[0]}.csv`,
-      (row, columnId) => {
+      (row: Projeto, columnId: string) => {
         switch (columnId) {
           case 'projeto':
             return row.nome;
@@ -453,7 +441,7 @@ export function Cargas({
     setCategorias((prev) =>
       prev.map((cat) => ({
         ...cat,
-        projetos: cat.projetos.map((p) => ({ ...p, [novoId]: '' })),
+        projetos: cat.projetos.map((p: Projeto) => ({ ...p, [novoId]: '' })),
       }))
     );
     setNovaColunaLabel('');
@@ -518,7 +506,11 @@ export function Cargas({
       if (coluna.useTags) {
         coluna.tagOptions = etiquetasPorCampo[colDin.id] || [];
       }
-      colunas.push(coluna);
+      colunas.push({
+        ...coluna,
+        width: coluna.width || '150px',
+        minWidth: coluna.minWidth || coluna.width || '150px',
+      });
     });
     // Filtrar colunas ocultas
     return colunas.filter((col) => !colunasOcultas.has(col.id));
@@ -604,23 +596,23 @@ export function Cargas({
 
                           // Campo tipoCarga e fatura usam badge simples
                           if (col.id === 'tipoCarga' || col.id === 'fatura') {
-                            column.render = (value) => renderBadge(value || '-');
+                            column.render = (value: any) => renderBadge(value || '-');
                           }
 
                           // Campo rsCom usa check
                           if (col.id === 'rsCom') {
-                            column.render = (value) => value ? <Check className="h-4 w-4 text-green-600" /> : '-';
+                            column.render = (value: any) => value ? <Check className="h-4 w-4 text-green-600" /> : '-';
                           }
 
                           return column;
                         })}
                         data={projetos}
-                        onCellChange={(rowIndex, columnId, value) => {
+                        onCellChange={(rowIndex: number, columnId: string, value: any) => {
                           const projeto = projetos[rowIndex];
                           setCategorias((prev) =>
                             prev.map((cat) => ({
                               ...cat,
-                              projetos: cat.projetos.map((p) => {
+                              projetos: cat.projetos.map((p: Projeto) => {
                                 if (p.id !== projeto.id) return p;
                                 // Mapear columnId para o campo correto no objeto
                                 const update: any = {};
@@ -640,7 +632,7 @@ export function Cargas({
                             }))
                           );
                         }}
-                        getCellValue={(row, columnId) => {
+                        getCellValue={(row: Projeto, columnId: string) => {
                           const projeto = row as Projeto & Record<string, any>;
                           // Verificar se é uma coluna dinâmica
                           if (colunasDinamicas.some((col) => col.id === columnId)) {
@@ -677,14 +669,14 @@ export function Cargas({
                         }}
                         enableSelection={true}
                         selectedRows={projetosSelecionadosPorCategoria[categoria.id] || new Set()}
-                        onSelectionChange={(selected) => {
+                        onSelectionChange={(selected: Set<number>) => {
                           setProjetosSelecionadosPorCategoria((prev) => ({
                             ...prev,
                             [categoria.id]: selected,
                           }));
                         }}
-                        onExport={(selectedData) => handleExportProjetos(categoria.id, selectedData)}
-                        getRowId={(row) => (row as Projeto).id}
+                        onExport={(selectedData: Projeto[]) => handleExportProjetos(categoria.id, selectedData)}
+                        getRowId={(row: Projeto) => row.id}
                         favorites={favoritos}
                         onToggleFavorite={toggleFavorito}
                         comments={comentarios}
@@ -723,7 +715,7 @@ export function Cargas({
       {/* Dialog de comentários por linha */}
       <Dialog
         open={!!projetoComentarioAberto}
-        onOpenChange={(open) => {
+        onOpenChange={(open: boolean) => {
           if (!open) {
             setProjetoComentarioAberto(null);
             setComentarioAtual('');
@@ -918,7 +910,7 @@ export function Cargas({
               <label className="text-sm font-medium">Nome da Coluna *</label>
               <Input
                 value={novaColunaLabel}
-                onChange={(e) => setNovaColunaLabel(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovaColunaLabel(e.target.value)}
                 placeholder="Ex: Observações, Status, etc."
                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                   if (e.key === 'Enter' && novaColunaLabel.trim()) {

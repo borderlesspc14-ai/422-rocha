@@ -12,7 +12,7 @@ interface KanbanColumnProps {
 }
 
 export function KanbanColumn({
-  id,
+  id: _id,
   title,
   processos,
   clientes,

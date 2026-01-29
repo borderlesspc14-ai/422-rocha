@@ -33,7 +33,7 @@ interface ProcessoModalProps {
 
 export function ProcessoModal({
   processo,
-  cliente,
+  cliente: _cliente,
   clientes = [],
   open,
   onClose,

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Filter, ArrowUpDown, Plus, Eye, Grid, Star, MessageCircle, X } from 'lucide-react';
+import { Search, Filter, ArrowUpDown, Plus, Eye, Grid, X } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,7 +50,7 @@ export function TarefasPendencias() {
   const [comentarios, setComentarios] = useState<Record<string, string[]>>({});
   const [tarefaComentarioAberto, setTarefaComentarioAberto] = useState<string | null>(null);
   const [comentarioAtual, setComentarioAtual] = useState('');
-  const [comentariosTemp, setComentariosTemp] = useState<string[]>([]);
+  const [, setComentariosTemp] = useState<string[]>([]);
 
   const tarefasFiltradas = useMemo(() => {
     let lista = tarefas;
@@ -195,7 +195,7 @@ export function TarefasPendencias() {
             type="search"
             placeholder="Pesquisar..."
             value={pesquisa}
-            onChange={(e) => setPesquisa(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPesquisa(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -233,7 +233,7 @@ export function TarefasPendencias() {
       </div>
 
       {tarefasFiltradas.length === 0 ? (
-        <div className="border border-slate-200 rounded-lg bg-white p-8 text-center text-slate-500">
+      <div className="border border-slate-200 rounded-lg bg-white p-8 text-center text-slate-500">
           {pesquisa ? 'Nenhuma tarefa encontrada' : 'Nenhuma tarefa pendente'}
         </div>
       ) : (
@@ -242,7 +242,7 @@ export function TarefasPendencias() {
             columns={colunas.map((col) => {
               const column: StandardTableColumn<Tarefa> = {
                 ...col,
-                render: (value, row) => {
+                render: (value: any) => {
                   if (col.id === 'status') {
                     return (
                       <span className={`px-2 py-1 rounded text-xs font-medium border ${getStatusBadgeClass(value || 'pendente')}`}>
@@ -263,8 +263,8 @@ export function TarefasPendencias() {
               return column;
             })}
             data={tarefasFiltradas}
-            getRowId={(row) => row.id}
-            onCellChange={(rowIndex, columnId, value) => {
+            getRowId={(row: Tarefa) => row.id}
+            onCellChange={(rowIndex: number, columnId: string, value: any) => {
               const tarefa = tarefasFiltradas[rowIndex];
               setTarefas((prev) =>
                 prev.map((t) =>
@@ -272,7 +272,7 @@ export function TarefasPendencias() {
                 )
               );
             }}
-            getCellValue={(row, columnId) => {
+            getCellValue={(row: Tarefa, columnId: string) => {
               return row[columnId as keyof Tarefa] || '';
             }}
             enableSelection={true}
@@ -281,12 +281,12 @@ export function TarefasPendencias() {
             favorites={favoritos}
             onToggleFavorite={toggleFavorito}
             comments={comentarios}
-            onOpenCommentDialog={(rowId) => {
+            onOpenCommentDialog={(rowId: string) => {
               setTarefaComentarioAberto(rowId);
               setComentariosTemp(comentarios[rowId] || []);
             }}
             editableHeaders={true}
-            onHeaderChange={(columnId, newLabel) => {
+            onHeaderChange={(_columnId: string, _newLabel: string) => {
               // Opcional: permitir editar cabeçalhos
             }}
           />
@@ -308,7 +308,7 @@ export function TarefasPendencias() {
               <Input
                 id="titulo"
                 value={novaTarefa.titulo || ''}
-                onChange={(e) => setNovaTarefa({ ...novaTarefa, titulo: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovaTarefa({ ...novaTarefa, titulo: e.target.value })}
                 placeholder="Título da tarefa"
               />
             </div>
@@ -317,7 +317,7 @@ export function TarefasPendencias() {
               <Input
                 id="descricao"
                 value={novaTarefa.descricao || ''}
-                onChange={(e) => setNovaTarefa({ ...novaTarefa, descricao: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovaTarefa({ ...novaTarefa, descricao: e.target.value })}
                 placeholder="Descrição da tarefa"
               />
             </div>
@@ -327,7 +327,7 @@ export function TarefasPendencias() {
                 <Input
                   id="responsavel"
                   value={novaTarefa.responsavel || ''}
-                  onChange={(e) => setNovaTarefa({ ...novaTarefa, responsavel: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovaTarefa({ ...novaTarefa, responsavel: e.target.value })}
                   placeholder="Nome do responsável"
                 />
               </div>
@@ -335,7 +335,7 @@ export function TarefasPendencias() {
                 <Label htmlFor="status">Status</Label>
                 <Select
                   value={novaTarefa.status || 'pendente'}
-                  onValueChange={(value) => setNovaTarefa({ ...novaTarefa, status: value as Tarefa['status'] })}
+                  onValueChange={(value: string) => setNovaTarefa({ ...novaTarefa, status: value as Tarefa['status'] })}
                 >
                   <SelectTrigger id="status">
                     <SelectValue />
@@ -353,7 +353,7 @@ export function TarefasPendencias() {
                 <Label htmlFor="prioridade">Prioridade</Label>
                 <Select
                   value={novaTarefa.prioridade || 'media'}
-                  onValueChange={(value) => setNovaTarefa({ ...novaTarefa, prioridade: value as Tarefa['prioridade'] })}
+                  onValueChange={(value: string) => setNovaTarefa({ ...novaTarefa, prioridade: value as Tarefa['prioridade'] })}
                 >
                   <SelectTrigger id="prioridade">
                     <SelectValue />
@@ -371,7 +371,7 @@ export function TarefasPendencias() {
                   id="prazo"
                   type="date"
                   value={novaTarefa.prazo || ''}
-                  onChange={(e) => setNovaTarefa({ ...novaTarefa, prazo: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovaTarefa({ ...novaTarefa, prazo: e.target.value })}
                 />
               </div>
             </div>
@@ -380,7 +380,7 @@ export function TarefasPendencias() {
               <Input
                 id="categoria"
                 value={novaTarefa.categoria || ''}
-                onChange={(e) => setNovaTarefa({ ...novaTarefa, categoria: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovaTarefa({ ...novaTarefa, categoria: e.target.value })}
                 placeholder="Categoria da tarefa"
               />
             </div>
@@ -413,7 +413,7 @@ export function TarefasPendencias() {
       {/* Dialog de comentários */}
       <Dialog
         open={!!tarefaComentarioAberto}
-        onOpenChange={(open) => {
+        onOpenChange={(open: boolean) => {
           if (!open) {
             setTarefaComentarioAberto(null);
             setComentarioAtual('');
@@ -432,8 +432,8 @@ export function TarefasPendencias() {
               <Input
                 placeholder="Digite um comentário..."
                 value={comentarioAtual}
-                onChange={(e) => setComentarioAtual(e.target.value)}
-                onKeyDown={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentarioAtual(e.target.value)}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                   if (e.key === 'Enter' && comentarioAtual.trim() && tarefaComentarioAberto) {
                     handleAdicionarComentario(tarefaComentarioAberto);
                   }
@@ -472,7 +472,7 @@ export function TarefasPendencias() {
                 <p className="text-sm text-slate-500 text-center py-4">Nenhum comentário ainda</p>
               )}
             </div>
-          </div>
+      </div>
           <DialogFooter>
             <Button
               variant="outline"

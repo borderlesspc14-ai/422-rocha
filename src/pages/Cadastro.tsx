@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Filter, ArrowUpDown, Plus, Eye, Grid, Check, X } from 'lucide-react';
+import { Search, Filter, ArrowUpDown, Plus, Eye, Grid, X } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,

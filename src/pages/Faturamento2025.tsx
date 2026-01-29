@@ -135,7 +135,7 @@ export function Faturamento2025() {
       { label: 'Sem registro', valor: 'Sem registro', cor: 'blue' },
     ],
     fatura: [
-      { label: 'FATURAR', valor: 'FATURAR', cor: 'purple' },
+      { label: 'FATURAR', valor: 'FATURAR', cor: 'blue' },
       { label: 'Sem registro', valor: 'Sem registro', cor: 'blue' },
     ],
     cambio: [

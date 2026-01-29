@@ -2,12 +2,6 @@ import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, X, Plus, ChevronDown, ChevronRight } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { StandardTable, StandardTableColumn, TagOption } from '@/components/ui/standard-table';
 import {
   Dialog,
@@ -672,7 +666,7 @@ export function Finalizados() {
                 <label className="text-sm font-medium">N/REF</label>
                 <Input
                   value={novoProjeto.nRef || ''}
-                  onChange={(e) => setNovoProjeto({ ...novoProjeto, nRef: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovoProjeto({ ...novoProjeto, nRef: e.target.value })}
                   placeholder="N/REF"
                 />
               </div>
@@ -682,7 +676,7 @@ export function Finalizados() {
                 <label className="text-sm font-medium">Cambio</label>
                 <Input
                   value={novoProjeto.cambio || ''}
-                  onChange={(e) => setNovoProjeto({ ...novoProjeto, cambio: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovoProjeto({ ...novoProjeto, cambio: e.target.value })}
                   placeholder="Cambio"
                 />
               </div>
@@ -690,7 +684,7 @@ export function Finalizados() {
                 <label className="text-sm font-medium">Exportador</label>
                 <Input
                   value={novoProjeto.exportador || ''}
-                  onChange={(e) => setNovoProjeto({ ...novoProjeto, exportador: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovoProjeto({ ...novoProjeto, exportador: e.target.value })}
                   placeholder="Exportador"
                 />
               </div>
@@ -700,7 +694,7 @@ export function Finalizados() {
                 <label className="text-sm font-medium">Agente de carga</label>
                 <Input
                   value={novoProjeto.agenteCarga || ''}
-                  onChange={(e) => setNovoProjeto({ ...novoProjeto, agenteCarga: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovoProjeto({ ...novoProjeto, agenteCarga: e.target.value })}
                   placeholder="Agente de carga"
                 />
               </div>
@@ -708,7 +702,7 @@ export function Finalizados() {
                 <label className="text-sm font-medium">REF. Ag Carga</label>
                 <Input
                   value={novoProjeto.refAgCarga || ''}
-                  onChange={(e) => setNovoProjeto({ ...novoProjeto, refAgCarga: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovoProjeto({ ...novoProjeto, refAgCarga: e.target.value })}
                   placeholder="REF. Ag Carga"
                 />
               </div>
@@ -718,7 +712,7 @@ export function Finalizados() {
                 <label className="text-sm font-medium">ETA</label>
                 <Input
                   value={novoProjeto.eta || ''}
-                  onChange={(e) => setNovoProjeto({ ...novoProjeto, eta: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovoProjeto({ ...novoProjeto, eta: e.target.value })}
                   placeholder="ETA"
                 />
               </div>
@@ -726,7 +720,7 @@ export function Finalizados() {
                 <label className="text-sm font-medium">REBATE</label>
                 <Input
                   value={novoProjeto.rebate || ''}
-                  onChange={(e) => setNovoProjeto({ ...novoProjeto, rebate: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovoProjeto({ ...novoProjeto, rebate: e.target.value })}
                   placeholder="REBATE"
                 />
               </div>
@@ -736,7 +730,7 @@ export function Finalizados() {
                 <label className="text-sm font-medium">OBS:</label>
                 <Input
                   value={novoProjeto.obs || ''}
-                  onChange={(e) => setNovoProjeto({ ...novoProjeto, obs: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovoProjeto({ ...novoProjeto, obs: e.target.value })}
                   placeholder="Observações"
                 />
               </div>
@@ -744,7 +738,7 @@ export function Finalizados() {
                 <label className="text-sm font-medium">Draft BL/AWB</label>
                 <Input
                   value={novoProjeto.draftBlAwb || ''}
-                  onChange={(e) => setNovoProjeto({ ...novoProjeto, draftBlAwb: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNovoProjeto({ ...novoProjeto, draftBlAwb: e.target.value })}
                   placeholder="Draft BL/AWB"
                 />
               </div>
@@ -760,7 +754,7 @@ export function Finalizados() {
                         <label className="text-sm font-medium">{col.label}</label>
                         <Input
                           value={novoProjeto[col.id] || ''}
-                          onChange={(e) =>
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setNovoProjeto({ ...novoProjeto, [col.id]: e.target.value })
                           }
                           placeholder={col.label}

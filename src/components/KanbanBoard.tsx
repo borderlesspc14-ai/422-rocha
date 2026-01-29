@@ -8,10 +8,6 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
 import { Processo, StatusProcesso, Cliente } from '@/types/comex';
 import { KanbanColumn } from './KanbanColumn';
 import { KanbanCard } from './KanbanCard';

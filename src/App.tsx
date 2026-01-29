@@ -20,7 +20,7 @@ import { processosMock, clientesMock } from '@/lib/mock-data';
 function AppContent() {
   const location = useLocation();
   const [processos, setProcessos] = useState<Processo[]>(processosMock);
-  const [clientes, setClientes] = useState<Cliente[]>(clientesMock);
+  const [clientes] = useState<Cliente[]>(clientesMock);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const toggleSidebar = () => {

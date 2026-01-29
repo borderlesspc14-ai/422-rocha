@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, X, Trash2, MoreVertical, ChevronDown, ChevronRight } from 'lucide-react';
@@ -72,7 +72,7 @@ export function TabelaGenerica() {
   const [comentariosTemp, setComentariosTemp] = useState<string[]>([]);
   const [mostrarDialogNovaCategoria, setMostrarDialogNovaCategoria] = useState(false);
   const [novaCategoriaNome, setNovaCategoriaNome] = useState('');
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState<string>('categoria-1');
+  const [categoriaSelecionada] = useState<string>('categoria-1');
   const [tagsByField, setTagsByField] = useState<Record<string, TagOption[]>>({});
 
   const nomeTabela =
@@ -101,11 +101,15 @@ export function TabelaGenerica() {
     if (confirm('Tem certeza que deseja remover esta coluna?')) {
       setColunas((prev) => prev.filter((c) => c.id !== id));
       // Remover campo de todas as linhas
-      setDados((prev) =>
-        prev.map((linha) => {
-          const { [id]: _, ...rest } = linha;
-          return rest;
-        })
+      // Remover campo de todas as linhas de todas as categorias
+      setCategorias((prev) =>
+        prev.map((cat) => ({
+          ...cat,
+          linhas: cat.linhas.map((linha) => {
+            const { [id]: _, ...rest } = linha;
+            return { ...rest, id: linha.id } as LinhaDados;
+          }),
+        }))
       );
     }
   };
@@ -248,7 +252,7 @@ export function TabelaGenerica() {
             type="search"
             placeholder="Pesquisar linhas..."
             value={pesquisa}
-            onChange={(e) => setPesquisa(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPesquisa(e.target.value)}
             className="pl-10"
           />
         </div>

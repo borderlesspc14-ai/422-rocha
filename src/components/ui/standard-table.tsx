@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Pin, PinOff, Download, Star, MessageCircle, Pencil, Tag, X } from 'lucide-react';
+import { Download, Star, MessageCircle, Pencil, Tag, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -108,7 +108,7 @@ export function StandardTable<T = any>({
   editableHeaders = true,
   onColumnTagsToggle,
 }: StandardTableProps<T>) {
-  const [firstColumnFixed, setFirstColumnFixed] = useState(
+  const [firstColumnFixed] = useState(
     controlledFirstColumnFixed !== undefined
       ? controlledFirstColumnFixed
       : defaultFirstColumnFixed

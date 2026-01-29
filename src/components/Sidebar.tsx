@@ -1,4 +1,4 @@
-import { ChevronRight, ChevronDown, ChevronLeft, Plus, Search, MoreVertical, Package, X, Trash2 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Search, MoreVertical, Package, X, Trash2 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useState, useMemo } from 'react';
@@ -42,7 +42,7 @@ const workspacesIniciais: Workspace[] = [
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [workspaceSelecionado, setWorkspaceSelecionado] = useState('Área de traba...');
+  // workspaceSelecionado removido - não utilizado
   const [workspaces, setWorkspaces] = useState<Workspace[]>(workspacesIniciais);
   const [buscaAtiva, setBuscaAtiva] = useState(false);
   const [termoBusca, setTermoBusca] = useState('');
@@ -237,7 +237,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     type="text"
                     placeholder="Buscar tabelas..."
                     value={termoBusca}
-                    onChange={(e) => setTermoBusca(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTermoBusca(e.target.value)}
                     className="pl-10 pr-8 text-sm bg-blue-800 border-blue-700 text-blue-50 placeholder:text-blue-200"
                     autoFocus
                   />
@@ -386,8 +386,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 id="nomeTabela"
                 placeholder="Ex: Nova Tabela 2025"
                 value={nomeNovaTabela}
-                onChange={(e) => setNomeNovaTabela(e.target.value)}
-                onKeyDown={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNomeNovaTabela(e.target.value)}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                   if (e.key === 'Enter' && nomeNovaTabela.trim()) {
                     handleAdicionarTabela();
                   }
